@@ -22,9 +22,19 @@ class AnalyticFile:
         return string_to_search in self.txt
     
     @property
-    def csv_files(self):
-        _csv_files = list(set(re.findall(r'read\.csv\(\s*\"(.*?).csv\"', self.txt, re.DOTALL)))
-        return [os.path.normpath(os.path.join(os.path.dirname(self.path), f + ".csv")) for f in _csv_files]
+    def csv_files(self, paths = ["/home/john/topics/minimum_wage/etl/transformed/","/home/john/topics/minimum_wage/computed_objects/"]):
+        #_csv_files = list(set(re.findall(r'read\.csv\(\s*\"(.*?).csv\"', self.txt, re.DOTALL)))
+        #_csv_files = list(set(re.findall(r'read\.csv\(\s*\"(.*?).csv\"', self.txt)))
+        csv_files = []
+        _csv_files = set(re.findall(r'GetData\("(.+)"\)', self.txt))
+        for csv_file in _csv_files:
+            for path in paths: 
+                full_path = os.path.normpath(os.path.join(path, csv_file))
+                print(full_path)
+                if os.path.isfile(full_path):
+                    csv_files.append(full_path)
+                    break
+        return csv_files
     
     @property
     def used_columns_dict(self):
