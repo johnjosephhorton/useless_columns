@@ -66,6 +66,13 @@ class AnalyticsFiles(Sequence):
     def __getitem__(self, index):
         return self._data[index]
     
+    def file_names(self):
+        return [analytic_file.name for analytic_file in self._data]
+    
+    def data_files(self):
+        # only get the filenmame, not the full path 
+        return [file.split("/")[-1] for file in self.csv_files]
+    
     def __len__(self):
         return len(self._data)
     
